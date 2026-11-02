@@ -1,0 +1,58 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.overnight.hyperchargelimit'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.overnight.hyperchargelimit'
+        // LSPosed は Android 8.1 (API 27) 以降が対象
+        minSdk 27
+        targetSdk 35
+        versionCode 5
+        versionName '1.3.1'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // src/main/resources の META-INF/xposed/* を APK に確実に入れる
+    // (AGP のデフォルト packaging では META-INF が除外されうるため)
+    packaging {
+        resources {
+            merges += 'META-INF/xposed/*'
+            excludes += '**'
+        }
+    }
+}
+
+// Kotlin のコンパイル先を JVM 17 にそろえる
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
+}
+
+dependencies {
+    // Modern Xposed API (libxposed) 102。
+    // 実行時はフレームワーク側から提供されるので compileOnly
+    compileOnly 'io.github.libxposed:api:102.0.0'
+
+    // 注: 当初は io.github.libxposed:service を使う計画だったが、
+    // 公開済みの service:102.0.0 が compileSdk 37 以上を要求してきて
+    // (AAR metadata check) このプロジェクト (SDK 35) では使えなかった。
+    // v1.1 から設定値の受け渡しは Settings.System 経由に変更したため、
+    // 追加ライブラリは不要になっている。
+}

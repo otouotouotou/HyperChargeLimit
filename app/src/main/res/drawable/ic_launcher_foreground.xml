@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  アダプティブアイコンの前景: 充電を表す稲妻 (bolt)。
+  108dp のキャンバス中央に白で描くシンプルなポリゴン。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M59,20 L31,62 L47,62 L41,88 L77,42 L59,42 Z" />
+</vector>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HyperChargeLimit</string>
+    <string name="xposed_description">HyperOS のバッテリー保護の充電上限%を好きな値に変更します (セキュリティセンターが対象)</string>
+</resources>
