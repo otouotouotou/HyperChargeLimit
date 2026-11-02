@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.util.Log
 import io.github.libxposed.api.XposedInterface.ExceptionMode
 import io.github.libxposed.api.XposedModule
@@ -42,12 +41,12 @@ import java.lang.reflect.Method
  * (ユーザーが保護を切った状態を勝手にONにしないため)。
  *
  * 設定値の受け渡し:
- *  モジュールアプリが Settings.System に保存した値
- *  (キー "hyper_charge_limit_percent") をフック側が読む。
- *  Settings.System は全アプリから読み取り可能なので、セキュリティ
- *  センターのプロセスからでもそのまま読める。
- *  (v1.0 で使った libxposed service ライブラリは compileSdk 37 を
- *  要求してきたため v1.1 でこの方式に変更した)
+ *  モジュールアプリが自前の保存領域 (ConfigStore) に保存した値を、
+ *  フック側がモジュールの ConfigProvider 経由で読む (v1.3.2〜)。
+ *  (v1.1〜v1.3.1 は Settings.System 経由だったが、その書き込みは
+ *  targetSdk 31 以降の SettingsProvider の制限で通常アプリからは
+ *  拒否されるため、実際には保存できていなかった — 初期値 90% の間は
+ *  フック側デフォルトと一致して問題が見えなかった)
  *  読めない環境ではデフォルト 90% で動く。
  */
 class MainHook : XposedModule() {
@@ -255,15 +254,29 @@ class MainHook : XposedModule() {
         return rewritten
     }
 
-    /** モジュールアプリが Settings.System に保存した上限% (20〜100) */
+    /** 上限% の短時間キャッシュ (プロバイダ照会は IPC なので毎回は引かない) */
+    @Volatile
+    private var cachedPercent: Int = -1
+
+    @Volatile
+    private var cachedPercentAt: Long = 0L
+
+    /** モジュールアプリが ConfigStore に保存した上限% (20〜100) */
     private fun currentLimit(): Int {
-        val resolver = contentResolver() ?: return DEFAULT_PERCENT
-        return try {
-            Settings.System.getInt(resolver, SETTINGS_KEY, DEFAULT_PERCENT)
-                .coerceIn(MIN_PERCENT, MAX_PERCENT)
+        val now = System.currentTimeMillis()
+        val cached = cachedPercent
+        if (cached >= 0 && now - cachedPercentAt < PERCENT_CACHE_MS) return cached
+        val resolver = contentResolver() ?: return ConfigStore.DEFAULT_PERCENT
+        val value = try {
+            resolver.query(ConfigStore.uri(), null, null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) cursor.getInt(0) else ConfigStore.DEFAULT_PERCENT
+            } ?: ConfigStore.DEFAULT_PERCENT
         } catch (t: Throwable) {
-            DEFAULT_PERCENT
-        }
+            ConfigStore.DEFAULT_PERCENT
+        }.coerceIn(ConfigStore.MIN_PERCENT, ConfigStore.MAX_PERCENT)
+        cachedPercent = value
+        cachedPercentAt = now
+        return value
     }
 
     /**
@@ -308,10 +321,7 @@ class MainHook : XposedModule() {
         /** 下位16ビットのモード値: 制限ON (共通保護) */
         private const val MODE_COMMON_PROTECT = 0x11
 
-        private const val SETTINGS_KEY = "hyper_charge_limit_percent"
-        private const val DEFAULT_PERCENT = 90
-        private const val MIN_PERCENT = 20
-        private const val MAX_PERCENT = 100
+        private const val PERCENT_CACHE_MS = 3000L
 
         private fun parseHex(value: String?): Int? {
             if (value == null) return null
