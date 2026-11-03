@@ -1,4 +1,18 @@
-# HyperChargeLimit v1.3.3
+# HyperChargeLimit v1.3.9
+
+## v1.3.9 の変更点
+- アイコンの絵を中央に 0.78 倍で配置し直した。一部環境では前景
+  レイヤーが拡大表示されて電池の左右と稲妻の上下が欠けていたため
+
+## v1.3.8 の変更点
+- アイコンの塗りをグラデーションから単色に変更。HyperOS / LSPosed の
+  アイコン描画ではベクターのグラデーションが描画されず、電池と稲妻が
+  白抜けしてしまったため (輪郭は描画されていた)
+
+## v1.3.7 の変更点
+- v1.3.3 をベースに、アイコンだけを変更。初期と同じベクター
+  (VectorDrawable) 形式のまま、電池+稲妻のイラストに似せて描き直した
+  (背景は白)。機能は v1.3.3 から変更なし
 
 ## v1.3.3 の変更点
 - 設定画面がシステムのライト/ダークモードに追従するようにした
@@ -26,6 +40,9 @@ Kotlin + Modern Xposed API (libxposed) 102 で実装。
 - API 102 対応の LSPosed フレームワーク
 
 動作確認　Xiaomi 17Ultra HyperOS3
+
+アイコンのモチーフにしたイラスト (Pngtree のフリー素材):
+https://pngtree.com/freepng/full-battery-charging-icon-with-lightning-bolt-power-symbol_24345457.html
 
 ## 使い方
 

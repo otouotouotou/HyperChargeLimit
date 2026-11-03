@@ -1,14 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  アダプティブアイコンの前景: 充電を表す稲妻 (bolt)。
-  108dp のキャンバス中央に白で描くシンプルなポリゴン。
--->
+<!-- 電池+稲妻アイコン (Pngtree のイラストをベクターで模したもの)
+     初期アイコンと同じ VectorDrawable 形式。ビューポート 108x108 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+
+    <!-- 一部環境 (HyperOS / LSPosed 等) では前景レイヤーが拡大表示され
+         端が欠けるため、絵全体を中央に 0.78 倍で配置する -->
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:scaleX="0.78"
+        android:scaleY="0.78">
+
+    <!-- 電池の端子 (右の小さい突起) -->
     <path
+        android:pathData="M88,45 L95,45 A3,3 0 0 1 98,48 L98,60 A3,3 0 0 1 95,63 L88,63 Z"
         android:fillColor="#FFFFFF"
-        android:pathData="M59,20 L31,62 L47,62 L41,88 L77,42 L59,42 Z" />
+        android:strokeColor="#212121"
+        android:strokeWidth="3"
+        android:strokeLineJoin="round" />
+
+    <!-- 電池の外枠 (白い縁) -->
+    <path
+        android:pathData="M12,44 A11,11 0 0 1 23,33 L79,33 A11,11 0 0 1 90,44 L90,64 A11,11 0 0 1 79,75 L23,75 A11,11 0 0 1 12,64 Z"
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#212121"
+        android:strokeWidth="3"
+        android:strokeLineJoin="round" />
+
+    <!-- 電池の中身 (緑) ※グラデーションは描画環境によって抜けるため単色 -->
+    <path
+        android:pathData="M17,46 A8,8 0 0 1 25,38 L77,38 A8,8 0 0 1 85,46 L85,62 A8,8 0 0 1 77,70 L25,70 A8,8 0 0 1 17,62 Z"
+        android:fillColor="#53B800"
+        android:strokeColor="#212121"
+        android:strokeWidth="2.5"
+        android:strokeLineJoin="round" />
+
+    <!-- ツヤ (上半分の白い反射) -->
+    <path
+        android:pathData="M23,47.5 A5,5 0 0 1 28,42.5 L74,42.5 A5,5 0 0 1 79,47.5 L79,52 L23,52 Z"
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.25" />
+
+    <!-- 稲妻 ※単色 -->
+    <path
+        android:pathData="M64,14 L34,62 L47,62 L40,94 L74,44 L59,44 Z"
+        android:fillColor="#FFC400"
+        android:strokeColor="#212121"
+        android:strokeWidth="3"
+        android:strokeLineJoin="round" />
+
+    </group>
 </vector>
