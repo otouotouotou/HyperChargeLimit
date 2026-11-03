@@ -1,6 +1,10 @@
 <img width="432" height="432" alt="HCLアイコン" src="https://github.com/user-attachments/assets/dc713158-4e0f-406d-80d0-cc5117a28e2d" />
 
-# HyperChargeLimit v1.3.9
+# HyperChargeLimit
+
+HyperOS の「バッテリー保護」が固定している充電上限 (80%) を、
+好きな値 (20〜100%、スライダーで設定) に変更する LSPosed モジュール。
+Kotlin + Modern Xposed API (libxposed) 102 で実装。
 
 ## v1.3.9 の変更点
 - v1.3.3 をベースに、アイコンだけを変更。初期と同じベクター
@@ -23,18 +27,14 @@
   実機ログで get の戻り値が set と別形式 ("16") だと判明し、
   v1.3 では能動適用が常にスキップされていたため
 
-HyperOS の「バッテリー保護」が固定している充電上限 (80%) を、
-好きな値 (20〜100%、スライダーで設定) に変更する LSPosed モジュール。
-Kotlin + Modern Xposed API (libxposed) 102 で実装。
-
 ## ライセンス・出典
 - 本プロジェクトは Apache License 2.0 の下で公開しています
   (全文は同梱の LICENSE ファイルを参照)
 - 本モジュールのコードは独自実装。充電制御の値エンコード
-  (上限% を上位ビットに格納する方式) は、HyperSmartCharge で
-  知られた手法を参考にした
-- アイコンは Pngtree のフリー素材イラストを基に、ベクター形式で
-  描き直したもの
+  (上限% を上位ビットに格納する方式) は、
+  HyperSmartCharge で知られた手法を参考にした
+- アイコンは Pngtree のフリー素材イラストを基に、ベクター形式で描き直したもの
+- 
   (https://pngtree.com/freepng/full-battery-charging-icon-with-lightning-bolt-power-symbol_24345457.html)
 - 依存ライブラリ: libxposed API (Apache License 2.0) を
   compileOnly で使用
