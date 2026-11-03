@@ -1,6 +1,9 @@
 package com.overnight.hyperchargelimit
 
 import android.app.Activity
+import android.content.res.ColorStateList
+import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -22,6 +25,9 @@ import android.widget.TextView
  *  その書き込みは targetSdk 31 以降の SettingsProvider の制限で
  *  通常アプリからは拒否されることが判明したため、v1.3.2 で
  *  ContentProvider 方式に切り替えた)
+ *
+ * v1.3.3: UI がシステムのライト/ダークに追従する
+ * (背景・文字・スライダーの色を切り替え、ダーク時は AMOLED 向け真っ黒)
  */
 class MainActivity : Activity() {
 
@@ -32,15 +38,30 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // システムのダークモードに追従する (ダーク時は AMOLED 向け真っ黒)
+        val night = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK ==
+            Configuration.UI_MODE_NIGHT_YES
+        val colorBg = if (night) Color.BLACK else Color.WHITE
+        val colorText =
+            if (night) Color.WHITE else Color.rgb(0x21, 0x21, 0x21)
+        val colorSub =
+            if (night) Color.rgb(0xB0, 0xB0, 0xB0) else Color.rgb(0x66, 0x66, 0x66)
+        val colorAccent =
+            if (night) Color.rgb(0x66, 0xBB, 0x6A) else Color.rgb(0x2E, 0x7D, 0x32)
+        val colorTrack =
+            if (night) Color.rgb(0x42, 0x42, 0x42) else Color.rgb(0xBD, 0xBD, 0xBD)
+
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(BASE_PADDING, BASE_PADDING, BASE_PADDING, BASE_PADDING)
+            setBackgroundColor(colorBg)
         }
 
         val title = TextView(this).apply {
             text = "HyperChargeLimit"
             textSize = 20f
             setTypeface(Typeface.DEFAULT_BOLD)
+            setTextColor(colorText)
         }
         root.addView(title)
 
@@ -49,12 +70,16 @@ class MainActivity : Activity() {
             textSize = 48f
             gravity = Gravity.CENTER
             setTypeface(Typeface.DEFAULT_BOLD)
+            setTextColor(colorText)
         }
         root.addView(percentLabel)
 
         seekBar = SeekBar(this).apply {
             max = ConfigStore.MAX_PERCENT - ConfigStore.MIN_PERCENT
             progress = ConfigStore.DEFAULT_PERCENT - ConfigStore.MIN_PERCENT
+            progressTintList = ColorStateList.valueOf(colorAccent)
+            thumbTintList = ColorStateList.valueOf(colorAccent)
+            progressBackgroundTintList = ColorStateList.valueOf(colorTrack)
             setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(bar: SeekBar?, progress: Int, fromUser: Boolean) {
                     percentLabel.text = "${progress + ConfigStore.MIN_PERCENT}%"
@@ -72,11 +97,13 @@ class MainActivity : Activity() {
         statusLabel = TextView(this).apply {
             textSize = 14f
             text = "スライダーを離すと保存されます"
+            setTextColor(colorSub)
         }
         root.addView(statusLabel)
 
         val desc = TextView(this).apply {
             textSize = 15f
+            setTextColor(colorText)
             text = "\n使い方:\n" +
                 "1. LSPosed マネージャーでこのモジュールを有効化し、" +
                 "スコープで「セキュリティセンター」を選ぶ\n" +
