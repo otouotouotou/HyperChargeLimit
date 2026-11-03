@@ -28,6 +28,8 @@ HyperOS の「バッテリー保護」が固定している充電上限 (80%) �
 Kotlin + Modern Xposed API (libxposed) 102 で実装。
 
 ## ライセンス・出典
+- 本プロジェクトは Apache License 2.0 の下で公開しています
+  (全文は同梱の LICENSE ファイルを参照)
 - 本モジュールのコードは独自実装。充電制御の値エンコード
   (上限% を上位ビットに格納する方式) は、HyperSmartCharge で
   知られた手法を参考にした
