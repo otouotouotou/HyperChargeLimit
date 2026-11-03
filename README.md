@@ -1,3 +1,5 @@
+<img width="432" height="432" alt="HCLアイコン" src="https://github.com/user-attachments/assets/dc713158-4e0f-406d-80d0-cc5117a28e2d" />
+
 # HyperChargeLimit v1.3.9
 
 ## v1.3.9 の変更点
