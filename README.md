@@ -28,7 +28,7 @@ Kotlin + Modern Xposed API (libxposed) 102 で実装。
 ## ライセンス・出典
 - 本モジュールのコードは独自実装。充電制御の値エンコード
   (上限% を上位ビットに格納する方式) は、HyperSmartCharge で
-  知られた手法を参考にしたもので、コードの流用はない
+  知られた手法を参考にした
 - アイコンは Pngtree のフリー素材イラストを基に、ベクター形式で
   描き直したもの
   (https://pngtree.com/freepng/full-battery-charging-icon-with-lightning-bolt-power-symbol_24345457.html)
@@ -41,9 +41,6 @@ Kotlin + Modern Xposed API (libxposed) 102 で実装。
 - API 102 対応の LSPosed フレームワーク
 
 動作確認　Xiaomi 17Ultra HyperOS3
-
-アイコンのモチーフにしたイラスト (Pngtree のフリー素材):
-https://pngtree.com/freepng/full-battery-charging-icon-with-lightning-bolt-power-symbol_24345457.html
 
 ## 使い方
 
